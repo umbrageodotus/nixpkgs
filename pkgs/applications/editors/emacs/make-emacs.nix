@@ -60,7 +60,7 @@
   systemdLibs,
   tree-sitter,
   texinfo,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
   zlib,
 
@@ -352,7 +352,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
   ]
   ++ lib.optionals (withXwidgets && stdenv.hostPlatform.isLinux) [
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
@@ -504,7 +504,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken =
+      (withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+      # webkitgtk_4_0 was removed
+      || withXwidgets;
     knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
       "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
     ];
